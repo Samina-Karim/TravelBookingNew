@@ -46,7 +46,16 @@ function handleSubmit()
 
   return (
     <>
-    <header className='head'>head</header>
+    <header className='head'>
+      <div>
+            <img className="logo-img" src="logo.png" height="100px" width="100px"></img>
+            <button>Home</button>
+            <button>About</button>
+            <button>Travel Packages</button>
+            <button>Contact</button>
+      </div>
+    </header>
+
     <main className='body'>
       <BrowseForm from = {handleFromChange} to={handleToChange} 
       season={handleSeasonChange} trav={handleTravelers} submit={handleSubmit}/>
