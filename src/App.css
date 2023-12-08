@@ -4,14 +4,16 @@ body{
 .head{
   height: 20vh;
   width: 100%;
-  background-color:rgb(247, 246, 246);
+  background-color:#c2daa2;
   color:black;
+  align-content: space-between;
+  
 }
 
 .body{
   height: 80vh;
   width: 100%;
-  background-color:rgb(57, 220, 220);
+  background-color:rgb(45, 100, 209);
 }
 
 

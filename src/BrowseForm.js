@@ -29,7 +29,7 @@ function BrowseForm({from,to,season,trav,submit})
 
   return (
     <div>
-      <h2>number of adults and children</h2>
+      <h2> Travel Search </h2>
       <div className='browseForm'>
         <div className='from'>
           <FaPlaneDeparture className='icon'/>
