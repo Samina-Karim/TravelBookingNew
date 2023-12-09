@@ -12,9 +12,10 @@ const [to,setTo] = useState('');
 const [season,setSeason] = useState('');
 const [trav,setTrav] = useState(1);
 
+const [showBrowsePopup, setShowBrowsePopup] = useState(false);
+const [showCreatePopup, setShowCreatePopup] = useState(false);
 const [showHomePopup, setShowHomePopup] = useState(false);
 const [showAboutPopup, setShowAboutPopup] = useState(false);
-const [showTravelPopup, setShowTravelPopup] = useState(false);
 const [showContactPopup, setShowContactPopup] = useState(false);
 
 const [travelPackage, setTravelPackage] = useState({
@@ -32,23 +33,65 @@ const [travelPackage, setTravelPackage] = useState({
 
 const openPopup = (popupName) => {
   switch (popupName) {
+    case 'browse':
+      setShowBrowsePopup(true);
+      setShowCreatePopup(false);
+      setShowHomePopup(false);
+      setShowAboutPopup(false);
+      setShowContactPopup(false);
+      break;
+    case 'create':
+      setShowCreatePopup(true);
+      setShowHomePopup(false);
+      setShowAboutPopup(false);
+      setShowContactPopup(false);
+      setShowBrowsePopup(false);
+      break;
     case 'home':
       setShowHomePopup(true);
+      setShowCreatePopup(false);
+      setShowAboutPopup(false);
+      setShowContactPopup(false);
+      setShowBrowsePopup(false);
       break;
     case 'about':
       setShowAboutPopup(true);
-      break;
-    case 'travel':
-      setShowTravelPopup(true);
+      setShowCreatePopup(false);
+      setShowHomePopup(false);  
+      setShowContactPopup(false); 
+      setShowBrowsePopup(false); 
       break;
     case 'contact':
       setShowContactPopup(true);
+      setShowCreatePopup(false);
+      setShowHomePopup(false);
+      setShowAboutPopup(false);
+      setShowBrowsePopup(false);
       break;
     default:
       break;
   }
 }
 
+
+// Keeps track of what the user is typing
+const handleTyping = (e) => {
+  e.preventDefault()
+  // Create a copy of the 'person' to keep track of what the user is typing
+  const newTravelPackage = {
+    ...travelPackage,
+    [e.target.name]: e.target.value
+  }
+  setTravelPackage(newTravelPackage);
+}
+
+const handleCreateTravelPackage = (e) => {
+  e.preventDefault();
+  const newTravelPackage = {
+    ...travelPackage
+  }
+}
+  
 
 function handleFromChange(e)
 {
@@ -90,16 +133,16 @@ function handleSubmit()
   <div className='button-container'>
     <img src={logo} height="130px" width="120px" alt="Logo" />
     <div className='button-group'>
-      <button>HOME</button>
-      <button>ABOUT</button>
-      <div className="dropdown">
-        <button className="dropbtn">TRAVEL PACKAGES</button>
-        <div className="dropdown-content">
-          <a href="#" onClick={() => openPopup('browsePackage')}>Browse Package</a>
-          <a href="#" onClick={() => openPopup('createTravelPackage')}>Create Package</a>
+      <button onClick={() => openPopup('home')}>HOME</button>
+      <button onClick={() => openPopup('about')}>ABOUT</button>
+      <div className="dropdownMenu">
+        <button className="dropdownButton">TRAVEL PACKAGES</button>
+        <div className="dropdownContent">
+          <a onClick={() => openPopup('browse')}>Browse Package </a>
+          <a onClick={() => openPopup('create')}>Create Package</a>
         </div>
       </div>
-      <button>CONTACT</button>
+      <button onClick={() => openPopup('contact')}>CONTACT</button>
     </div>
   </div>
 </header>
@@ -108,10 +151,39 @@ function handleSubmit()
       <BrowseForm from = {handleFromChange} to={handleToChange} 
       season={handleSeasonChange} trav={handleTravelers} submit={handleSubmit}/>
       
+      {showCreatePopup && ( // Conditional rendering based on showCreatePopup state
+      
+        <div className = "createPopUpMenu">
+          <h3>Create Package</h3>
+          Name: <input name="name" value={travelPackage.name} onChange={handleTyping} />
+          <br/>
+          Destination: <input name="destination" value={travelPackage.destination} onChange={handleTyping}/>
+          <br/>
+          Seasonal: <input name="seasonal" value={travelPackage.seasonal} onChange={handleTyping} />
+          <br/>
+          TicketsLeft: <input name="ticketsleft" value={travelPackage.ticketsleft} onChange={handleTyping} />
+          <br/>
+          Duration: <input name="duration" value={travelPackage.duration} onChange={handleTyping} />
+          <br/>
+          Attraction1: <input name="attraction1" value={travelPackage.attraction1} onChange={handleTyping} />
+          <br/>
+          Attraction2: <input name="attraction2" value={travelPackage.attraction2} onChange={handleTyping} />
+          <br/>
+          Attraction3: <input name="attraction3" value={travelPackage.attraction3} onChange={handleTyping} />
+          <br/>
+          Price: <input name="price" value={travelPackage.price} onChange={handleTyping} />
+          <br/>
+          Accomodation: <input name="accomodation" value={travelPackage.accomodation} onChange={handleTyping} />
+          <br/>
+          <button onClick={handleCreateTravelPackage}>Submit </button>
+        </div>
+        )}   
+
     </main>
       
     </>
   );
-}
+
+      }
 
 export default App;
