@@ -86,17 +86,23 @@ function handleSubmit()
 
   return (
     <>
-    <header className='head'>
-      <div className='button-container'>
-      <img src={logo} height="130px" width="120px" alt="Logo" />
-      <div className='button-group'>
-            <button>HOME</button>
-            <button>ABOUT</button>
-            <button onClick={() => openPopup('createTravelPackage')}>TRAVEL PACKAGES</button>
-            <button>CONTACT</button>
-          </div>
+   <header className='head'>
+  <div className='button-container'>
+    <img src={logo} height="130px" width="120px" alt="Logo" />
+    <div className='button-group'>
+      <button>HOME</button>
+      <button>ABOUT</button>
+      <div className="dropdown">
+        <button className="dropbtn">TRAVEL PACKAGES</button>
+        <div className="dropdown-content">
+          <a href="#" onClick={() => openPopup('browsePackage')}>Browse Package</a>
+          <a href="#" onClick={() => openPopup('createTravelPackage')}>Create Package</a>
+        </div>
       </div>
-    </header>
+      <button>CONTACT</button>
+    </div>
+  </div>
+</header>
 
     <main className='body'>
       <BrowseForm from = {handleFromChange} to={handleToChange} 
