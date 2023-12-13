@@ -32,6 +32,9 @@ function App() {
     reviews: [],
   });
 
+  const alpha="alpha";
+  const num="num";
+
   const openPopup = (popupName) => {
     switch (popupName) {
       case "browse":
@@ -74,35 +77,52 @@ function App() {
     }
   };
 
-  // Keeps track of what the user is typing
-  const handleTyping = (e) => {
-    e.preventDefault();
-    console.log("Event ",e.target.value);
-    // Create a copy of the 'person' to keep track of what the user is typing
-    const newTravelPackage = {
-      ...travelPackage,
-      [e.target.name]: e.target.value,
-    };
-    setTravelPackage(newTravelPackage);
-    console.log("TP ", travelPackage)
-  };
 
+  const handleTyping = (e,type) => {
+    e.preventDefault();
+    
+    var regex;
+
+    const { name, value } = e.target;
+    if (type=="alpha"){
+      regex = /^[A-Za-z]+$/
+    }
+    else if (type=="num"){
+      regex = /^[0-9]+$/; // Regex pattern to allow only numbers
+
+    }
+
+     // Regex pattern to allow only alphabets
+  
+    if (value === '' || regex.test(value)) {
+       console.log("Event ",e.target.value);
+        
+        const newTravelPackage = {
+          ...travelPackage,
+        [e.target.name]: e.target.value,
+        };
+        setTravelPackage(newTravelPackage);
+        console.log("TP ", travelPackage)
+    };
+  }
+
+  
    // Function to handle the image file selection
    const handleImageChange = (e) => {
     console.log("Image e",e);
     const file = e.target.files[0]; // Get the selected file
 
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
+      // const imageUrl = URL.createObjectURL(file);
       setTravelPackage({
         ...travelPackage,
-        image: imageUrl, // Update the image URL in the state
+        image: file, // Update the image URL in the state
       });
     
 
     console.log("Image TP ", travelPackage)
     console.log("Image file ",file);
-    console.log("Image file ",imageUrl);
+    // console.log("Image file ",imageUrl);
   }
   };
 
@@ -177,70 +197,81 @@ function App() {
             <input
               name="name"
               value={travelPackage.name}
-              onChange={handleTyping}
+              // inputType="alpha"
+              onChange={(e) =>handleTyping(e,alpha)}
+
+
             />
             <br />
             Destination:{" "}
             <input
               name="destination"
               value={travelPackage.destination}
-              onChange={handleTyping}
+              // inputType="alphabets"
+              onChange={(e) =>handleTyping(e,alpha)}
             />
             <br />
             Seasonal:{" "}
             <input
               name="seasonal"
               value={travelPackage.seasonal}
-              onChange={handleTyping}
+              onChange={(e) =>handleTyping(e,alpha)}
             />
             <br />
             TicketsLeft:{" "}
             <input
               name="ticketsleft"
               value={travelPackage.ticketsleft}
-              onChange={handleTyping}
+              inputType="numbers"
+              onChange={(e) =>handleTyping(e,num)}
             />
             <br />
             Duration:{" "}
             <input
               name="duration"
               value={travelPackage.duration}
-              onChange={handleTyping}
+              inputType="numbers"
+              onChange={(e) =>handleTyping(e,num)}
             />
             <br />
             Attraction1:{" "}
             <input
               name="attraction1"
               value={travelPackage.attraction1}
-              onChange={handleTyping}
+              inputType="alphabets"
+              onChange={(e) =>handleTyping(e,alpha)}
             />
             <br />
             Attraction2:{" "}
             <input
               name="attraction2"
               value={travelPackage.attraction2}
-              onChange={handleTyping}
+              inputType="alphabets"
+              onChange={(e) =>handleTyping(e,alpha)}
             />
             <br />
             Attraction3:{" "}
             <input
               name="attraction3"
               value={travelPackage.attraction3}
-              onChange={handleTyping}
+              inputType="alphabets"
+              onChange={(e) =>handleTyping(e,alpha)}
             />
             <br />
             Price:{" "}
             <input
               name="price"
               value={travelPackage.price}
-              onChange={handleTyping}
+              inputType="numbers"
+              onChange={(e) =>handleTyping(e,num)}
             />
             <br />
             Accomodation:{" "}
             <input
               name="accomodation"
               value={travelPackage.accomodation}
-              onChange={handleTyping}
+              inputType="alphabets"
+              onChange={(e) =>handleTyping(e,alpha)}
             />
             <br />
             Image:{" "}
