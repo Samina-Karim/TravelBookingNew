@@ -4,8 +4,6 @@ import { useState } from "react";
 import React from "react";
 import logo from "./logo.png";
 
-// import axios from 'axios';
-
 function App() {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
@@ -24,6 +22,7 @@ function App() {
     seasonal: "",
     ticketsleft: 0,
     duration: 0,
+    attractionNum:0,
     attraction: [],
     price: 0,
     accommodation: "",
@@ -84,15 +83,12 @@ function App() {
     var regex;
 
     const { name, value } = e.target;
-    if (type=="alpha"){
+    if (type=="alpha"){   // Regex pattern to allow only alphabets
       regex = /^[A-Za-z]+$/
     }
     else if (type=="num"){
       regex = /^[0-9]+$/; // Regex pattern to allow only numbers
-
-    }
-
-     // Regex pattern to allow only alphabets
+    }  
   
     if (value === '' || regex.test(value)) {
        console.log("Event ",e.target.value);
@@ -197,17 +193,13 @@ function App() {
             <input
               name="name"
               value={travelPackage.name}
-              // inputType="alpha"
               onChange={(e) =>handleTyping(e,alpha)}
-
-
             />
             <br />
             Destination:{" "}
             <input
               name="destination"
               value={travelPackage.destination}
-              // inputType="alphabets"
               onChange={(e) =>handleTyping(e,alpha)}
             />
             <br />
@@ -222,7 +214,6 @@ function App() {
             <input
               name="ticketsleft"
               value={travelPackage.ticketsleft}
-              inputType="numbers"
               onChange={(e) =>handleTyping(e,num)}
             />
             <br />
@@ -230,18 +221,28 @@ function App() {
             <input
               name="duration"
               value={travelPackage.duration}
-              inputType="numbers"
               onChange={(e) =>handleTyping(e,num)}
             />
             <br />
-            Attraction1:{" "}
+            Number of Attractions:{" "}
+            <input
+              name="attractionNum"
+              value={travelPackage.attractionNum}
+          
+              onChange={(e) => handleTyping(e,num)}
+              
+              
+            />
+            <br />
+            {/* <br />
+            Number of Attraction1:{" "}
             <input
               name="attraction1"
               value={travelPackage.attraction1}
               inputType="alphabets"
               onChange={(e) =>handleTyping(e,alpha)}
             />
-            <br />
+            <br /> 
             Attraction2:{" "}
             <input
               name="attraction2"
@@ -257,12 +258,11 @@ function App() {
               inputType="alphabets"
               onChange={(e) =>handleTyping(e,alpha)}
             />
-            <br />
+            <br /> */}
             Price:{" "}
             <input
               name="price"
               value={travelPackage.price}
-              inputType="numbers"
               onChange={(e) =>handleTyping(e,num)}
             />
             <br />
@@ -270,7 +270,6 @@ function App() {
             <input
               name="accomodation"
               value={travelPackage.accomodation}
-              inputType="alphabets"
               onChange={(e) =>handleTyping(e,alpha)}
             />
             <br />
@@ -282,6 +281,8 @@ function App() {
               onChange={handleImageChange}
               
             />
+            <br />
+            {/* <button onClick={(e) => handleAddAttractions(e,)}>Next </button> */}
             <br />
             <button onClick={handleCreateTravelPackage}>Submit </button>
           </div>
