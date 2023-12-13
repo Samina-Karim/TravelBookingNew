@@ -12,6 +12,7 @@ function App() {
 
   const [showBrowsePopup, setShowBrowsePopup] = useState(false);
   const [showCreatePopup, setShowCreatePopup] = useState(false);
+  const [showCreatePopup2, setShowCreatePopup2] = useState(false);
   const [showHomePopup, setShowHomePopup] = useState(false);
   const [showAboutPopup, setShowAboutPopup] = useState(false);
   const [showContactPopup, setShowContactPopup] = useState(false);
@@ -33,18 +34,29 @@ function App() {
 
   const alpha="alpha";
   const num="num";
+  const alphaNum="alphaNum"
 
   const openPopup = (popupName) => {
     switch (popupName) {
       case "browse":
         setShowBrowsePopup(true);
         setShowCreatePopup(false);
+        setShowCreatePopup2(false);
         setShowHomePopup(false);
         setShowAboutPopup(false);
         setShowContactPopup(false);
         break;
-      case "create":
+      case "create1":
         setShowCreatePopup(true);
+        setShowCreatePopup2(false);
+        setShowHomePopup(false);
+        setShowAboutPopup(false);
+        setShowContactPopup(false);
+        setShowBrowsePopup(false);
+        break;
+        case "create2":
+        setShowCreatePopup(false);
+        setShowCreatePopup2(true);
         setShowHomePopup(false);
         setShowAboutPopup(false);
         setShowContactPopup(false);
@@ -53,6 +65,7 @@ function App() {
       case "home":
         setShowHomePopup(true);
         setShowCreatePopup(false);
+        setShowCreatePopup2(false);
         setShowAboutPopup(false);
         setShowContactPopup(false);
         setShowBrowsePopup(false);
@@ -60,6 +73,7 @@ function App() {
       case "about":
         setShowAboutPopup(true);
         setShowCreatePopup(false);
+        setShowCreatePopup2(false);
         setShowHomePopup(false);
         setShowContactPopup(false);
         setShowBrowsePopup(false);
@@ -67,6 +81,7 @@ function App() {
       case "contact":
         setShowContactPopup(true);
         setShowCreatePopup(false);
+        setShowCreatePopup2(false);
         setShowHomePopup(false);
         setShowAboutPopup(false);
         setShowBrowsePopup(false);
@@ -88,8 +103,12 @@ function App() {
     }
     else if (type=="num"){
       regex = /^[0-9]+$/; // Regex pattern to allow only numbers
+    }  else if (type=="alphaNum"){
+      regex = /^[a-zA-Z0-9]*$/; // Regex pattern to allow only numbers
     }  
-  
+    
+    
+    
     if (value === '' || regex.test(value)) {
        console.log("Event ",e.target.value);
         
@@ -99,7 +118,14 @@ function App() {
         };
         setTravelPackage(newTravelPackage);
         console.log("TP ", travelPackage)
-    };
+    }
+    else{
+      if (type=="alpha")
+        alert("Please enter alphabets");
+      
+      if (type=="num")
+        alert("Please enter numbers");
+    }
   }
 
   
@@ -169,7 +195,7 @@ function App() {
               <button className="dropdownButton">TRAVEL PACKAGES</button>
               <div className="dropdownContent">
                 <a onClick={() => openPopup("browse")}>Browse Package </a>
-                <a onClick={() => openPopup("create")}>Create Package</a>
+                <a onClick={() => openPopup("create1")}>Create Package</a>
               </div>
             </div>
             <button onClick={() => openPopup("contact")}>CONTACT</button>
@@ -233,7 +259,7 @@ function App() {
               
               
             />
-            <br />
+          
             {/* <br />
             Number of Attraction1:{" "}
             <input
@@ -270,7 +296,7 @@ function App() {
             <input
               name="accomodation"
               value={travelPackage.accomodation}
-              onChange={(e) =>handleTyping(e,alpha)}
+              onChange={(e) =>handleTyping(e,alphaNum)}
             />
             <br />
             Image:{" "}
@@ -284,7 +310,8 @@ function App() {
             <br />
             {/* <button onClick={(e) => handleAddAttractions(e,)}>Next </button> */}
             <br />
-            <button onClick={handleCreateTravelPackage}>Submit </button>
+            <button onClick={() => openPopup("create2")}>Next</button>
+            {/* <button onClick={handleCreateTravelPackage}>Submit </button> */}
           </div>
         )}
       </main>
