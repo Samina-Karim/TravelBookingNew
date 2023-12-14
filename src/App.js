@@ -26,7 +26,7 @@ function App() {
     attractionNum:0,
     attraction: [],
     price: 0,
-    accommodation: "",
+    accomodation: "",
     image:null,
     rate: { avgRating: 0, arrayOfRating: [] },
     reviews: [],
@@ -35,6 +35,37 @@ function App() {
   const alpha="alpha";
   const num="num";
   const alphaNum="alphaNum"
+ 
+  const maxDuration=7;
+  const maxAttractions=5;
+  const [errorMessage, setErrorMessage] =  useState({
+    name:"",
+    destination:"",
+    seasonal: "",
+    ticketsleft: "",
+    duration: "",
+    attractionNum: "",
+    price: "",
+    accomodation: "",
+    image:""
+})
+
+  const resetErrorMessage =() => {
+    const noErrorMessage = {
+      name:"",
+      destination:"",
+      seasonal: "",
+      ticketsleft: "",
+      duration: "",
+      attractionNum: "",
+      price: "",
+      accomodation: "",
+      image:"",
+  };
+
+  setErrorMessage(noErrorMessage);
+
+  };
 
   const openPopup = (popupName) => {
     switch (popupName) {
@@ -53,6 +84,7 @@ function App() {
         setShowAboutPopup(false);
         setShowContactPopup(false);
         setShowBrowsePopup(false);
+        resetErrorMessage();
         break;
         case "create2":
         setShowCreatePopup(false);
@@ -96,6 +128,7 @@ function App() {
     e.preventDefault();
     
     var regex;
+    var errorCode="";
 
     const { name, value } = e.target;
     if (type=="alpha"){   // Regex pattern to allow only alphabets
@@ -107,25 +140,74 @@ function App() {
       regex = /^[a-zA-Z0-9]*$/; // Regex pattern to allow only numbers
     }  
     
+    console.log("Name: ",name, " Value: ",value);
+    if ((name=="duration") && (value > maxDuration))
+        errorCode="Max duration is "+maxDuration;
+      
+    else if ((name=="attractionNum") && (value > maxAttractions))
+        errorCode="Max # of attractions is "+ maxAttractions;
     
-    
-    if (value === '' || regex.test(value)) {
-       console.log("Event ",e.target.value);
-        
-        const newTravelPackage = {
-          ...travelPackage,
+    else if  (regex.test(value)) {
+      console.log("Event ",e.target.value);
+            
+      const newTravelPackage = {
+        ...travelPackage,
         [e.target.name]: e.target.value,
         };
-        setTravelPackage(newTravelPackage);
-        console.log("TP ", travelPackage)
+      setTravelPackage(newTravelPackage);
+      console.log("TP ", travelPackage)
     }
     else{
-      if (type=="alpha")
-        alert("Please enter alphabets");
+    if (type=="alpha")
+      errorCode="Please enter alphabets";
+          
+    if (type=="num")
+     errorCode="Please enter numbers";
+   }
+    
+   console.log("ErrorCode ", errorCode);
+   console.log("Name ", name);
+    
+  
+   console.log("ERROR ",errorMessage);
+
+   switch(name) {
+      case 'name':
+          setErrorMessage({ ...errorMessage,name:errorCode});
+         
+        break;
+        case 'destination':
+          setErrorMessage({...errorMessage,destination:errorCode});
+          
+        break;
+        case 'seasonal':
+          setErrorMessage({...errorMessage,seasonal:errorCode});
       
-      if (type=="num")
-        alert("Please enter numbers");
-    }
+        break;
+        case 'ticketsLeft':
+          setErrorMessage({...errorMessage,ticketsleft:errorCode});
+       
+        break;
+        case 'duration':
+          setErrorMessage({...errorMessage,duration:errorCode});
+          
+        break;
+        case 'attractionNum':
+          setErrorMessage({...errorMessage,attractionNum:errorCode});
+        break;
+        case 'price':
+          setErrorMessage({...errorMessage,price:errorCode});
+          
+        break;
+        case 'accomodation':
+          setErrorMessage({...errorMessage,accomdation:errorCode});
+        break;
+        case 'image':
+          setErrorMessage({...errorMessage,image:errorCode});
+        break;
+         
+   }
+
   }
 
   
@@ -202,7 +284,7 @@ function App() {
           </div>
         </div>
       </header>
-
+      
       <main className="body">
         <BrowseForm
           from={handleFromChange}
@@ -215,42 +297,46 @@ function App() {
         {showCreatePopup && ( // Conditional rendering based on showCreatePopup state
           <div className="createPopUpMenu">
             <h3>Create Package</h3>
-            Name:{" "}
+
+            Name:{<span className="error">{errorMessage.name}</span>}
             <input
               name="name"
               value={travelPackage.name}
               onChange={(e) =>handleTyping(e,alpha)}
             />
+            
+      
             <br />
-            Destination:{" "}
+            Destination:{<span className="error">{errorMessage.destination}</span>}
             <input
               name="destination"
               value={travelPackage.destination}
               onChange={(e) =>handleTyping(e,alpha)}
             />
             <br />
-            Seasonal:{" "}
+            Seasonal:{<span className="error">{errorMessage.seasonal}</span>}
             <input
               name="seasonal"
               value={travelPackage.seasonal}
               onChange={(e) =>handleTyping(e,alpha)}
             />
             <br />
-            TicketsLeft:{" "}
+            TicketsLeft:{<span className="error">{errorMessage.ticketsleft}</span>}
             <input
               name="ticketsleft"
               value={travelPackage.ticketsleft}
               onChange={(e) =>handleTyping(e,num)}
             />
             <br />
-            Duration:{" "}
+            Duration:
+            {<span className="error">{errorMessage.duration}</span>}
             <input
               name="duration"
               value={travelPackage.duration}
               onChange={(e) =>handleTyping(e,num)}
             />
             <br />
-            Number of Attractions:{" "}
+            # of Attractions:{<span className="error">{errorMessage.attractionNum}</span>}
             <input
               name="attractionNum"
               value={travelPackage.attractionNum}
@@ -285,21 +371,21 @@ function App() {
               onChange={(e) =>handleTyping(e,alpha)}
             />
             <br /> */}
-            Price:{" "}
+            Price:{<span className="error">{errorMessage.price}</span>}
             <input
               name="price"
               value={travelPackage.price}
               onChange={(e) =>handleTyping(e,num)}
             />
             <br />
-            Accomodation:{" "}
+            Accomodation:{<span className="error">{errorMessage.accomodation}</span>}
             <input
               name="accomodation"
               value={travelPackage.accomodation}
               onChange={(e) =>handleTyping(e,alphaNum)}
             />
             <br />
-            Image:{" "}
+            Image:{<span className="error">{errorMessage.image}</span>}
             <input
              
               type="file"

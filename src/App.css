@@ -193,3 +193,12 @@ body{
   padding: 10px;
 
 }
+
+
+/* error message display in create form */
+
+.error{
+
+  color:red;
+  font-size:small;
+}
