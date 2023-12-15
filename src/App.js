@@ -1,6 +1,6 @@
 import "./App.css";
 import BrowseForm from "./BrowseForm";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 import logo from "./logo.png";
 
@@ -9,10 +9,11 @@ function App() {
   const [to, setTo] = useState("");
   const [season, setSeason] = useState("");
   const [trav, setTrav] = useState(1);
+  
+  const [test, setTest] = useState(false);
 
   const [showBrowsePopup, setShowBrowsePopup] = useState(false);
   const [showCreatePopup, setShowCreatePopup] = useState(false);
-  const [showCreatePopup2, setShowCreatePopup2] = useState(false);
   const [showHomePopup, setShowHomePopup] = useState(false);
   const [showAboutPopup, setShowAboutPopup] = useState(false);
   const [showContactPopup, setShowContactPopup] = useState(false);
@@ -21,74 +22,43 @@ function App() {
     name: "",
     destination: "",
     seasonal: "",
-    ticketsleft: 0,
+    ticketsLeft: 0,
     duration: 0,
-    attractionNum:0,
-    attraction: [],
+    numAttractions:0,
+    attractions: [],
     price: 0,
     accomodation: "",
     image:null,
     rate: { avgRating: 0, arrayOfRating: [] },
     reviews: [],
   });
+  const [attractions, setAttractions] = useState([]); // State to hold attractions
 
-  const alpha="alpha";
-  const num="num";
-  const alphaNum="alphaNum"
+  useEffect(() => {
+    setTravelPackage(prevState => ({
+      ...prevState,
+      attractions: attractions // Update attractions in travelPackage when attractions state changes
+    }));
+  }, [attractions]);
+
  
   const maxDuration=7;
   const maxAttractions=5;
-  const [errorMessage, setErrorMessage] =  useState({
-    name:"",
-    destination:"",
-    seasonal: "",
-    ticketsleft: "",
-    duration: "",
-    attractionNum: "",
-    price: "",
-    accomodation: "",
-    image:""
-})
-
-  const resetErrorMessage =() => {
-    const noErrorMessage = {
-      name:"",
-      destination:"",
-      seasonal: "",
-      ticketsleft: "",
-      duration: "",
-      attractionNum: "",
-      price: "",
-      accomodation: "",
-      image:"",
-  };
-
-  setErrorMessage(noErrorMessage);
-
-  };
+  const maxTickets=100;
+  const maxPrice=5000;
+  const maxPackages=5;
 
   const openPopup = (popupName) => {
     switch (popupName) {
       case "browse":
         setShowBrowsePopup(true);
         setShowCreatePopup(false);
-        setShowCreatePopup2(false);
         setShowHomePopup(false);
         setShowAboutPopup(false);
         setShowContactPopup(false);
         break;
-      case "create1":
+      case "create":
         setShowCreatePopup(true);
-        setShowCreatePopup2(false);
-        setShowHomePopup(false);
-        setShowAboutPopup(false);
-        setShowContactPopup(false);
-        setShowBrowsePopup(false);
-        resetErrorMessage();
-        break;
-        case "create2":
-        setShowCreatePopup(false);
-        setShowCreatePopup2(true);
         setShowHomePopup(false);
         setShowAboutPopup(false);
         setShowContactPopup(false);
@@ -97,7 +67,6 @@ function App() {
       case "home":
         setShowHomePopup(true);
         setShowCreatePopup(false);
-        setShowCreatePopup2(false);
         setShowAboutPopup(false);
         setShowContactPopup(false);
         setShowBrowsePopup(false);
@@ -105,7 +74,6 @@ function App() {
       case "about":
         setShowAboutPopup(true);
         setShowCreatePopup(false);
-        setShowCreatePopup2(false);
         setShowHomePopup(false);
         setShowContactPopup(false);
         setShowBrowsePopup(false);
@@ -113,7 +81,6 @@ function App() {
       case "contact":
         setShowContactPopup(true);
         setShowCreatePopup(false);
-        setShowCreatePopup2(false);
         setShowHomePopup(false);
         setShowAboutPopup(false);
         setShowBrowsePopup(false);
@@ -124,119 +91,6 @@ function App() {
   };
 
 
-  const handleTyping = (e,type) => {
-    e.preventDefault();
-    
-    var regex;
-    var errorCode="";
-
-    const { name, value } = e.target;
-    if (type=="alpha"){   // Regex pattern to allow only alphabets
-      regex = /^[A-Za-z]+$/
-    }
-    else if (type=="num"){
-      regex = /^[0-9]+$/; // Regex pattern to allow only numbers
-    }  else if (type=="alphaNum"){
-      regex = /^[a-zA-Z0-9]*$/; // Regex pattern to allow only numbers
-    }  
-    
-    console.log("Name: ",name, " Value: ",value);
-    if ((name=="duration") && (value > maxDuration))
-        errorCode="Max duration is "+maxDuration;
-      
-    else if ((name=="attractionNum") && (value > maxAttractions))
-        errorCode="Max # of attractions is "+ maxAttractions;
-    
-    else if  (regex.test(value)) {
-      console.log("Event ",e.target.value);
-            
-      const newTravelPackage = {
-        ...travelPackage,
-        [e.target.name]: e.target.value,
-        };
-      setTravelPackage(newTravelPackage);
-      console.log("TP ", travelPackage)
-    }
-    else{
-    if (type=="alpha")
-      errorCode="Please enter alphabets";
-          
-    if (type=="num")
-     errorCode="Please enter numbers";
-   }
-    
-   console.log("ErrorCode ", errorCode);
-   console.log("Name ", name);
-    
-  
-   console.log("ERROR ",errorMessage);
-
-   switch(name) {
-      case 'name':
-          setErrorMessage({ ...errorMessage,name:errorCode});
-         
-        break;
-        case 'destination':
-          setErrorMessage({...errorMessage,destination:errorCode});
-          
-        break;
-        case 'seasonal':
-          setErrorMessage({...errorMessage,seasonal:errorCode});
-      
-        break;
-        case 'ticketsLeft':
-          setErrorMessage({...errorMessage,ticketsleft:errorCode});
-       
-        break;
-        case 'duration':
-          setErrorMessage({...errorMessage,duration:errorCode});
-          
-        break;
-        case 'attractionNum':
-          setErrorMessage({...errorMessage,attractionNum:errorCode});
-        break;
-        case 'price':
-          setErrorMessage({...errorMessage,price:errorCode});
-          
-        break;
-        case 'accomodation':
-          setErrorMessage({...errorMessage,accomdation:errorCode});
-        break;
-        case 'image':
-          setErrorMessage({...errorMessage,image:errorCode});
-        break;
-         
-   }
-
-  }
-
-  
-   // Function to handle the image file selection
-   const handleImageChange = (e) => {
-    console.log("Image e",e);
-    const file = e.target.files[0]; // Get the selected file
-
-    if (file) {
-      // const imageUrl = URL.createObjectURL(file);
-      setTravelPackage({
-        ...travelPackage,
-        image: file, // Update the image URL in the state
-      });
-    
-
-    console.log("Image TP ", travelPackage)
-    console.log("Image file ",file);
-    // console.log("Image file ",imageUrl);
-  }
-  };
-
-  const handleCreateTravelPackage = (e) => {
-    e.preventDefault();
-    console.log("Create Travel Package",e);
-    const newTravelPackage = {
-      ...travelPackage,
-    };
-  };
 
   function handleFromChange(e) {
     e.preventDefault();
@@ -265,6 +119,101 @@ function App() {
     console.log(from, to, season, trav);
   }
 
+
+  const handleCreateTravelPackage = (event) => {
+    event.preventDefault(); // Prevents the default form submission behavior
+    const formData = new FormData(event.target); // Access form data using FormData
+
+    // Access input values using their 'name' attributes from FormData
+    const name = formData.get('name');
+    const destination = formData.get('destination');
+    const seasonal = formData.get('seasonal');
+    const ticketsLeft = formData.get('ticketsLeft');
+    const duration = formData.get('duration');
+    const numAttractions = formData.get('numAttractions');
+    const price = formData.get('price');
+    const accomodation = formData.get('accomodation');
+
+  // Create a new travel package object with the retrieved values
+    const newTravelPackage = {
+    ...travelPackage, // Spread the existing travelPackage object
+    name: name, // Assign the 'name' field from form data
+    destination: destination, // Assign the 'destination' field from form data
+    seasonal:seasonal,
+    ticketsLeft:ticketsLeft,
+    duration:duration,
+    numAttractions:numAttractions,
+    price:price,
+    accomodation:accomodation
+    };
+
+    setTravelPackage(newTravelPackage);
+    console.log("TravelPackage ", newTravelPackage, travelPackage);
+    // You can perform further actions with the input values here
+  };
+
+    // Function to handle the image file selection
+    const handleImageChange = (e) => {
+        console.log("Image e",e);
+        const imageFile = e.target.files[0]; // Get the selected file
+    
+        if (imageFile) {
+          // const imageUrl = URL.createObjectURL(file);
+          setTravelPackage({
+            ...travelPackage,
+            image: imageFile.name, // Update the image URL in the state
+          });
+        
+    
+        console.log("Image TP ", travelPackage)
+        console.log("Image file ",imageFile);
+        // console.log("Image file ",imageUrl);
+      }
+      };
+
+      const handleAttractionChange = (e, index) => {
+        const updatedAttractions = [...attractions];
+        updatedAttractions[index] = e.target.value;
+        setAttractions(updatedAttractions);
+      };
+
+
+      const createAttractionInputs = () => {
+        const attractionInputs = [];
+        for (let i = 0; i < attractions.length; i++) {
+          attractionInputs.push(
+            <div key={`attraction_${i}`}>
+              <label htmlFor={`attraction_${i + 1}`}>{`Attraction ${i + 1}: `}</label>
+              <input
+                id={`attraction_${i + 1}`}
+                name={`attraction_${i + 1}`}
+                value={attractions[i] || ''}
+                required pattern="[A-Za-z0-9 ]+"
+                title="Please enter alphabets or numbers"
+                onChange={(e) => handleAttractionChange(e, i)}
+              />
+            </div>
+          );
+        }
+        return attractionInputs;
+      };
+
+      const handleNumAttractionsChange = (e) => {
+        let num = parseInt(e.target.value, 10);
+   
+        if (isNaN(num)){
+            num=0;
+        }
+
+        const updatedAttractions = Array(num).fill('');
+        setAttractions(updatedAttractions);
+      };
+
+
+     
+
+
+
   return (
     <>
       <header className="head">
@@ -277,7 +226,7 @@ function App() {
               <button className="dropdownButton">TRAVEL PACKAGES</button>
               <div className="dropdownContent">
                 <a onClick={() => openPopup("browse")}>Browse Package </a>
-                <a onClick={() => openPopup("create1")}>Create Package</a>
+                <a onClick={() => openPopup("create")}>Create Package</a>
               </div>
             </div>
             <button onClick={() => openPopup("contact")}>CONTACT</button>
@@ -297,107 +246,96 @@ function App() {
         {showCreatePopup && ( // Conditional rendering based on showCreatePopup state
           <div className="createPopUpMenu">
             <h3>Create Package</h3>
+            <form onSubmit={handleCreateTravelPackage}>
+                <label htmlFor="name"> Name: </label>
+                <input
+                id="name"
+                name="name"
+                type="text"
+                required pattern="[A-Za-z ]+"
+                title="Please enter alphabets"
+                />
+                <label htmlFor="destination"> Destination: </label>
+                <input
+                id="destination"
+                name="destination"
+                type="text"
+                required pattern="[A-Za-z ]+"
+                title="Please enter alphabets"
+                />
+                <br></br>
+                <br></br>
+                <div>
+                <label htmlFor="seasonal" style={{ display: 'inline-block' }}>Season: </label>
+                <select id="seasonal" name="seasonal" >
+                <option value="" >Select</option>
+                <option value="Winter">Winter</option>
+                <option value="Spring">Spring</option>
+                <option value="Summer">Summer</option>
+                <option value="Fall">Fall</option>
+                </select>
+                </div>
+               <br></br>
+                <label htmlFor="ticketsLeft"> Tickets Left: </label>
+                <input
+                id="ticketsLeft"
+                name="ticketsLeft"
+                type="number"
+                required pattern="[0-9]+"
+                min="1"
+                max={maxTickets}
+                title="Please enter numbers"
+                />
+                <label htmlFor="duration"> Duration: </label>
+                <input
+                id="duration"
+                name="duration"
+                type="number"
+                required pattern="[0-9]+"
+                min="1"
+                max={maxDuration}
+                title="Please enter numbers"
+                />
+                <label htmlFor="numAttractions"> # of Attractions: </label>
+                <input
+                id="numAttractions"
+                name="numAttractions"
+                type="number"
+                required pattern="[0-9]+"
+                min="1"
+                max={maxAttractions}
+                title="Please enter numbers"
+                onChange={handleNumAttractionsChange}
+                />
+               
+                {/* Render attraction input fields dynamically */}
+                {createAttractionInputs()} 
 
-            Name:{<span className="error">{errorMessage.name}</span>}
-            <input
-              name="name"
-              value={travelPackage.name}
-              onChange={(e) =>handleTyping(e,alpha)}
-            />
-            
-      
-            <br />
-            Destination:{<span className="error">{errorMessage.destination}</span>}
-            <input
-              name="destination"
-              value={travelPackage.destination}
-              onChange={(e) =>handleTyping(e,alpha)}
-            />
-            <br />
-            Seasonal:{<span className="error">{errorMessage.seasonal}</span>}
-            <input
-              name="seasonal"
-              value={travelPackage.seasonal}
-              onChange={(e) =>handleTyping(e,alpha)}
-            />
-            <br />
-            TicketsLeft:{<span className="error">{errorMessage.ticketsleft}</span>}
-            <input
-              name="ticketsleft"
-              value={travelPackage.ticketsleft}
-              onChange={(e) =>handleTyping(e,num)}
-            />
-            <br />
-            Duration:
-            {<span className="error">{errorMessage.duration}</span>}
-            <input
-              name="duration"
-              value={travelPackage.duration}
-              onChange={(e) =>handleTyping(e,num)}
-            />
-            <br />
-            # of Attractions:{<span className="error">{errorMessage.attractionNum}</span>}
-            <input
-              name="attractionNum"
-              value={travelPackage.attractionNum}
-          
-              onChange={(e) => handleTyping(e,num)}
-              
-              
-            />
-          
-            {/* <br />
-            Number of Attraction1:{" "}
-            <input
-              name="attraction1"
-              value={travelPackage.attraction1}
-              inputType="alphabets"
-              onChange={(e) =>handleTyping(e,alpha)}
-            />
-            <br /> 
-            Attraction2:{" "}
-            <input
-              name="attraction2"
-              value={travelPackage.attraction2}
-              inputType="alphabets"
-              onChange={(e) =>handleTyping(e,alpha)}
-            />
-            <br />
-            Attraction3:{" "}
-            <input
-              name="attraction3"
-              value={travelPackage.attraction3}
-              inputType="alphabets"
-              onChange={(e) =>handleTyping(e,alpha)}
-            />
-            <br /> */}
-            Price:{<span className="error">{errorMessage.price}</span>}
-            <input
-              name="price"
-              value={travelPackage.price}
-              onChange={(e) =>handleTyping(e,num)}
-            />
-            <br />
-            Accomodation:{<span className="error">{errorMessage.accomodation}</span>}
-            <input
-              name="accomodation"
-              value={travelPackage.accomodation}
-              onChange={(e) =>handleTyping(e,alphaNum)}
-            />
-            <br />
-            Image:{<span className="error">{errorMessage.image}</span>}
-            <input
-             
-              type="file"
-              // value={travelPackage.image}
-              onChange={handleImageChange}
-              
-            />
-            <br />
-            {/* <button onClick={(e) => handleAddAttractions(e,)}>Next </button> */}
-            <br />
-            <button onClick={() => openPopup("create2")}>Next</button>
-            {/* <button onClick={handleCreateTravelPackage}>Submit </button> */}
+                <label htmlFor="price"> Price: </label>
+                <input
+                id="price"
+                name="price"
+                type="number"
+                required pattern="[0-9]+"
+                min="1"
+                max={maxPrice}
+                title="Please enter numbers"
+                />
+                <label htmlFor="accomodation">Accomodation: </label>
+                <input
+                id="accomodation"
+                name="accomodation"
+                required pattern="[A-Za-z0-9 ]+"
+                title="Please enter alphabets or numbers"
+                />
+                <label htmlFor="image">Image: </label>
+                <input  
+                type="file"
+                required
+                onChange={handleImageChange}
+                />
+                <button type="submit">Submit</button>
+            </form> 
           </div>
         )}
       </main>
