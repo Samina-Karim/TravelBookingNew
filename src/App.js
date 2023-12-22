@@ -5,7 +5,17 @@ import { useState, useEffect } from "react";
 import React from "react";
 import logo from "./logo.png";
 
+
+/************************************************************************/
+
 function App() {
+     
+  const maxDuration=7;
+  const maxAttractions=5;
+  const maxTickets=100;
+  const maxPrice=5000;
+  const maxPackages=5;
+
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [season, setSeason] = useState("");
@@ -26,37 +36,34 @@ function App() {
    name: "", 
    destination: "", 
    seasonal:"",
-   ticketsLeft:0,
-   duration:0,
-   numAttractions:0,
+   ticketsLeft:"0",
+   duration:"0",
+   numAttractions:"0",
    attractions:[],
-   price:0,
+   price:"0",
    accomodation:"",
-   avgRating:0,
+   avgRating:"0",
    arrayOfRating:[],
    reviews:[],
    image:""
    };
 
-// Sync loads all the travel packages from the mockapi onto the local  object
+/*********************************************************************************/
+
+useEffect(() => {
+    syncTravelPackages();
+}, []) // Run once
+
+/***** Sync loads all the travel packages from the mockapi into travlePackage ******/
 const syncTravelPackages = () => {
   APIServices.getTravelPackageAPI().then(travelPackage => setTravelPackage(travelPackage))
 
   console.log("Initial Sync",travelPackage)
 }
-// Run once
-useEffect(() => {
-    syncTravelPackages();
-}, [])
 
- 
-  const maxDuration=7;
-  const maxAttractions=5;
-  const maxTickets=100;
-  const maxPrice=5000;
-  const maxPackages=5;
+/*********************** Control Popup Menu Displays *****************************/
 
-  const openPopup = (popupName) => {
+const openPopup = (popupName) => {
     switch (popupName) {
       case "browse":
         setShowBrowsePopup(true);
@@ -96,46 +103,41 @@ useEffect(() => {
       default:
         break;
     }
-  };
+};
+/****************************************************************************/
 
-
-
-  function handleFromChange(e) {
+function handleFromChange(e) {
     e.preventDefault();
     // console.log(e.target.value);
     setFrom(e.target.value);
-  }
+}
 
-  function handleToChange(e) {
+function handleToChange(e) {
     e.preventDefault();
     // console.log(e.target.value);
     setTo(e.target.value);
-  }
+}
 
-  function handleSeasonChange(e) {
+function handleSeasonChange(e) {
     e.preventDefault();
     // console.log(e.target.value);
     setSeason(e.target.value);
-  }
+}
 
-  function handleTravelers(travelers) {
+function handleTravelers(travelers) {
     console.log(travelers);
     setTrav(travelers);
-  }
+}
 
-  function handleSubmit() {
+function handleSubmit() {
     console.log(from, to, season, trav);
-  }
+}
 
-
+/************ handleCreateTravelPackageClick ******************/
   const handleCreateTravelPackageClick = async(event) => {
     event.preventDefault(); // Prevents the default form submission behavior
-    
+
     let formData = new FormData(event.target); // Access form data using FormData
-
-
-    console.log("Event formData ",event.target);
-    // Access input values using their 'name' attributes from FormData
     const name = formData.get('name');
     const destination = formData.get('destination');
     const seasonal = formData.get('seasonal');
@@ -146,20 +148,15 @@ useEffect(() => {
     const accomodation = formData.get('accomodation');
     const image = formData.get('image');
 
-    console.log("IMAGE ",image);
-
     // Create an array to store attractions
-
     for (let i=1;i<=numAttractions;i++){
         attractions[i-1]=formData.get(`attraction_${i}`);
-
     }
-     // Update the state with the new array of attractions
 
-  // Create a new travel package object with the retrieved values
+    // Create a new travel package object with the retrieved values
     const newTravelPackage = {
-    name: name, // Assign the 'name' field from form data
-    destination: destination, // Assign the 'destination' field from form data
+    name: name,                 // Assign the 'name' field from form data
+    destination: destination,   // Assign the 'destination' field from form data
     seasonal:seasonal,
     ticketsLeft:ticketsLeft,
     duration:duration,
@@ -167,7 +164,7 @@ useEffect(() => {
     attractions:attractions,
     price:price,
     accomodation:accomodation,
-    avgRating:0,
+    avgRating:"0",
     arrayOfRating:[],
     reviews:[],
     image:image.name
@@ -176,15 +173,18 @@ useEffect(() => {
     setTravelPackage(newTravelPackage);
     console.log("TravelPackage Loaded ", newTravelPackage);
     await APIServices.addTravelPackageAPI(newTravelPackage).then(() => {
-        syncTravelPackages();
-       
+        syncTravelPackages(); 
     })
     setTravelPackage(emptyTravelPackage);
+    setTravelPackage({
+        ...travelPackage,
+        image: "", // Update the image URL in the state
+    });
     console.log("TravelPackage Empty ", travelPackage);
     setShowCreatePopup(false);
   };
 
-    // Function to handle the image file selection
+/************  Function to handle the image file selection ****************/
     const handleImageChange = (e) => {
         console.log("Image e",e);
         const imageFile = e.target.files[0]; // Get the selected file
@@ -196,21 +196,21 @@ useEffect(() => {
             image: imageFile.name, // Update the image URL in the state
           });
         
-    
         console.log("Image TP ", travelPackage)
         console.log("Image file ",imageFile);
         // console.log("Image file ",imageUrl);
       }
-      };
+    };
 
-      const handleAttractionChange = (e, index) => {
+/*********************  handleAttractionChange *************************/
+    const handleAttractionChange = (e, index) => {
         const updatedAttractions = [...attractions];
         updatedAttractions[index] = e.target.value;
         setAttractions(updatedAttractions);
-      };
+    };
 
-
-      const createAttractionInputs = () => {
+/*********************  createAttractionInputs *************************/
+    const createAttractionInputs = () => {
         const attractionInputs = [];
         for (let i = 0; i < attractions.length; i++) {
           attractionInputs.push(
@@ -219,30 +219,28 @@ useEffect(() => {
               <input
                 id={`attraction_${i + 1}`}
                 name={`attraction_${i + 1}`}
-                // value={attractions[i] || ''}
                 required pattern="[A-Za-z0-9 ]+"
                 title="Please enter alphabets or numbers"
-                // onChange={(e) => handleAttractionChange(e, i)}
               />
             </div>
           );
         }
         return attractionInputs;
-      };
+    };
 
-      const handleNumAttractionsChange = (e) => {
+/*********************  handleNumAttractionsChange *************************/
+    const handleNumAttractionsChange = (e) => {
         let num = parseInt(e.target.value, 10);
    
         if (isNaN(num)){
             num=0;
         }
-
         const updatedAttractions = Array(num).fill('');
         setAttractions(updatedAttractions);
-      };
+    };
      
 
-
+/************************** Return ****************************************/
 
   return (
     <>
@@ -365,7 +363,6 @@ useEffect(() => {
                 required
                 onChange={handleImageChange}
                 />
-                 {/* <button type="submit" onClick={() => handleCreateSubmit}>Submit</button> */}
                  <button type="submit">Submit</button> 
             </form> 
           </div>
