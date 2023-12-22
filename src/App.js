@@ -1,5 +1,6 @@
 import "./App.css";
 import BrowseForm from "./BrowseForm";
+import APIServices from "./ApiServices";
 import { useState, useEffect } from "react";
 import React from "react";
 import logo from "./logo.png";
@@ -18,28 +19,35 @@ function App() {
   const [showAboutPopup, setShowAboutPopup] = useState(false);
   const [showContactPopup, setShowContactPopup] = useState(false);
 
-  const [travelPackage, setTravelPackage] = useState({
-    name: "",
-    destination: "",
-    seasonal: "",
-    ticketsLeft: 0,
-    duration: 0,
-    numAttractions:0,
-    attractions: [],
-    price: 0,
-    accomodation: "",
-    image:null,
-    rate: { avgRating: 0, arrayOfRating: [] },
-    reviews: [],
-  });
+  const [travelPackage, setTravelPackage] = useState([]);
   const [attractions, setAttractions] = useState([]); // State to hold attractions
+  
+  const emptyTravelPackage = {
+   name: "", 
+   destination: "", 
+   seasonal:"",
+   ticketsLeft:0,
+   duration:0,
+   numAttractions:0,
+   attractions:[],
+   price:0,
+   accomodation:"",
+   avgRating:0,
+   arrayOfRating:[],
+   reviews:[],
+   image:""
+   };
 
-  useEffect(() => {
-    setTravelPackage(prevState => ({
-      ...prevState,
-      attractions: attractions // Update attractions in travelPackage when attractions state changes
-    }));
-  }, [attractions]);
+// Sync loads all the travel packages from the mockapi onto the local  object
+const syncTravelPackages = () => {
+  APIServices.getTravelPackageAPI().then(travelPackage => setTravelPackage(travelPackage))
+
+  console.log("Initial Sync",travelPackage)
+}
+// Run once
+useEffect(() => {
+    syncTravelPackages();
+}, [])
 
  
   const maxDuration=7;
@@ -120,10 +128,13 @@ function App() {
   }
 
 
-  const handleCreateTravelPackage = (event) => {
+  const handleCreateTravelPackageClick = async(event) => {
     event.preventDefault(); // Prevents the default form submission behavior
-    const formData = new FormData(event.target); // Access form data using FormData
+    
+    let formData = new FormData(event.target); // Access form data using FormData
 
+
+    console.log("Event formData ",event.target);
     // Access input values using their 'name' attributes from FormData
     const name = formData.get('name');
     const destination = formData.get('destination');
@@ -133,23 +144,44 @@ function App() {
     const numAttractions = formData.get('numAttractions');
     const price = formData.get('price');
     const accomodation = formData.get('accomodation');
+    const image = formData.get('image');
+
+    console.log("IMAGE ",image);
+
+    // Create an array to store attractions
+
+    for (let i=1;i<=numAttractions;i++){
+        attractions[i-1]=formData.get(`attraction_${i}`);
+
+    }
+     // Update the state with the new array of attractions
 
   // Create a new travel package object with the retrieved values
     const newTravelPackage = {
-    ...travelPackage, // Spread the existing travelPackage object
     name: name, // Assign the 'name' field from form data
     destination: destination, // Assign the 'destination' field from form data
     seasonal:seasonal,
     ticketsLeft:ticketsLeft,
     duration:duration,
     numAttractions:numAttractions,
+    attractions:attractions,
     price:price,
-    accomodation:accomodation
+    accomodation:accomodation,
+    avgRating:0,
+    arrayOfRating:[],
+    reviews:[],
+    image:image.name
     };
 
     setTravelPackage(newTravelPackage);
-    console.log("TravelPackage ", newTravelPackage, travelPackage);
-    // You can perform further actions with the input values here
+    console.log("TravelPackage Loaded ", newTravelPackage);
+    await APIServices.addTravelPackageAPI(newTravelPackage).then(() => {
+        syncTravelPackages();
+       
+    })
+    setTravelPackage(emptyTravelPackage);
+    console.log("TravelPackage Empty ", travelPackage);
+    setShowCreatePopup(false);
   };
 
     // Function to handle the image file selection
@@ -187,10 +219,10 @@ function App() {
               <input
                 id={`attraction_${i + 1}`}
                 name={`attraction_${i + 1}`}
-                value={attractions[i] || ''}
+                // value={attractions[i] || ''}
                 required pattern="[A-Za-z0-9 ]+"
                 title="Please enter alphabets or numbers"
-                onChange={(e) => handleAttractionChange(e, i)}
+                // onChange={(e) => handleAttractionChange(e, i)}
               />
             </div>
           );
@@ -208,8 +240,6 @@ function App() {
         const updatedAttractions = Array(num).fill('');
         setAttractions(updatedAttractions);
       };
-
-
      
 
 
@@ -246,7 +276,7 @@ function App() {
         {showCreatePopup && ( // Conditional rendering based on showCreatePopup state
           <div className="createPopUpMenu">
             <h3>Create Package</h3>
-            <form onSubmit={handleCreateTravelPackage}>
+            <form onSubmit={handleCreateTravelPackageClick}>
                 <label htmlFor="name"> Name: </label>
                 <input
                 id="name"
@@ -302,7 +332,7 @@ function App() {
                 name="numAttractions"
                 type="number"
                 required pattern="[0-9]+"
-                min="1"
+                min="0"
                 max={maxAttractions}
                 title="Please enter numbers"
                 onChange={handleNumAttractionsChange}
@@ -331,10 +361,12 @@ function App() {
                 <label htmlFor="image">Image: </label>
                 <input  
                 type="file"
+                name="image"
                 required
                 onChange={handleImageChange}
                 />
-                <button type="submit">Submit</button>
+                 {/* <button type="submit" onClick={() => handleCreateSubmit}>Submit</button> */}
+                 <button type="submit">Submit</button> 
             </form> 
           </div>
         )}
