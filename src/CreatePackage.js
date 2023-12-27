@@ -8,7 +8,7 @@ const CreatePackage = ({ travelPackage, setTravelPackage,syncTravelPackages, set
   const maxAttractions=5;
   const maxTickets=100;
   const maxPrice=5000;
-  const maxPackages=5;
+ 
   const [attractions, setAttractions] = useState([]); // State to hold attractions
   
   const emptyTravelPackage = {
@@ -69,12 +69,8 @@ const handleCreateTravelPackageClick = async(event) => {
   await APIServices.addTravelPackageAPI(newTravelPackage).then(() => {
       syncTravelPackages(); 
   })
-  setTravelPackage(emptyTravelPackage);
-  setTravelPackage({
-      ...travelPackage,
-      image: "", // Update the image URL in the state
-  });
-  console.log("TravelPackage Empty ", travelPackage);
+
+  console.log("TravelPackage Status ", travelPackage);
   setShowCreatePopup(false);
 };
 
@@ -226,6 +222,11 @@ const handleCreateTravelPackageClick = async(event) => {
         />
          <button type="submit">Submit</button> 
     </form> 
+
+    {/* <div>
+           <button onClick={handleProceed}>Proceed</button>
+           {proceedConfirmation && <p>You chose to proceed!</p>}
+         </div> */}
   </div>
 )}
 

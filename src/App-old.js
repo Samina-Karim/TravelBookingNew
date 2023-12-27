@@ -26,11 +26,24 @@ function App() {
   const [showMessagePopup, setShowMessagePopup] = useState(false);
   const [travelPackage, setTravelPackage] = useState([]);
   const [userMessage, setUserMessage] = useState("");
- 
+  const [showProceedMessagePopup, setShowProceedMessagePopup] = useState(false);
   const maxPackages=5;
 
 
+  const [proceedConfirmation, setProceedConfirmation] = useState(false);
 
+  const handleProceed = () => {
+    const confirmed = window.confirm('Do you want to proceed? (Y/N)');
+    if (confirmed) {
+      // If user clicks 'OK' (Yes)
+      setProceedConfirmation(true);
+      // Implement your logic for proceeding here
+    } else {
+      // If user clicks 'Cancel' (No)
+      setProceedConfirmation(false);
+      // Implement logic if user chooses not to proceed
+    }
+  };
 
 /*********************************************************************************/
 
@@ -174,7 +187,12 @@ function handleSubmit() {
 
         />
         }
-       
+        {showProceedMessagePopup && (
+           <div>
+           <button onClick={handleProceed}>Proceed</button>
+           {proceedConfirmation && <p>You chose to proceed!</p>}
+         </div>
+        )}
 
         
         {/* {showDeletePopup &&
