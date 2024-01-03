@@ -2,13 +2,14 @@ import "./App.css";
 
 import BrowseForm from "./BrowseForm";
 import CreatePackage from "./CreatePackage";
+import DeletePackage from "./DeletePackage";
 import APIServices from "./ApiServices";
 import { useState, useEffect } from "react";
 import React from "react";
 import logo from "./logo.png";
 
 
-/************************************************************************/
+// ************************* SAMINA **********************************************/
 
 function App() {
 
@@ -32,19 +33,26 @@ function App() {
 
 
 
-/*********************************************************************************/
+// *************************** SAMINA ******************************************************/
 
 useEffect(() => {
     syncTravelPackages();
 }, []) // Run once
 
-/***** Sync loads all the travel packages from the mockapi into travelPackage ******/
+//***** Sync loads all the travel packages from the mockapi into travelPackage ******/
 const syncTravelPackages = () => {
-  APIServices.getTravelPackageAPI().then(travelPackage => setTravelPackage(travelPackage))
+  // console.log("Initial Sync Before",travelPackage)
+  APIServices.getTravelPackageAPI().then((travelPackages)=> {
+    setTravelPackage(travelPackages);
+    console.log("Initial Sync After",travelPackages)
+  }) 
 
-  console.log("Initial Sync",travelPackage)
+ 
 }
-/**************************** */
+
+
+
+//******************** SAMINA ***************************************** */
 const togglePopup = () => {
     setShowMessagePopup(!showMessagePopup);
   };
@@ -55,7 +63,7 @@ const togglePopup = () => {
   };
   
 
-/*********************** Control Popup Menu Displays *****************************/
+//*********************** Control Popup Menu Displays(SAMINA)*****************************/
 
 const openPopup = (popupName) => {
     setShowBrowsePopup(false);
@@ -70,6 +78,7 @@ const openPopup = (popupName) => {
           setShowBrowsePopup(true);
           break;
         case "create":
+          console.log("Travel Package", travelPackage)
           if (travelPackage.length < maxPackages){
               setShowCreatePopup(true);  
           } else{
@@ -102,7 +111,7 @@ const openPopup = (popupName) => {
           break;
     }
 };
-/****************************************************************************/
+//****************** HANA **********************************************************/
 
 function handleFromChange(e) {
     e.preventDefault();
@@ -132,10 +141,11 @@ function handleSubmit() {
 }
 
 
-/************************** Return ****************************************/
+//************************** Return ****************************************/
 
   return (
     <>
+{/*************** SAMINA ***********************/}
       <header className="head">
         <div className="button-container">
           <img src={logo} height="130px" width="120px" alt="Logo" />
@@ -154,7 +164,7 @@ function handleSubmit() {
           </div>
         </div>
       </header>
-      
+{/* ************* HANA ******************* */}
       <main className="body">
         <BrowseForm
           from={handleFromChange}
@@ -163,21 +173,18 @@ function handleSubmit() {
           trav={handleTravelers}
           submit={handleSubmit}
         />
-
+{/************** SAMINA ********************/}
         {showCreatePopup &&
         <CreatePackage
             travelPackage={travelPackage}
             setTravelPackage={setTravelPackage}
             syncTravelPackages={syncTravelPackages}
             setShowCreatePopup={setShowCreatePopup}
-
-
+            
         />
         }
-       
-
         
-        {/* {showDeletePopup &&
+       {showDeletePopup &&
         <DeletePackage
             travelPackage={travelPackage}
             setTravelPackage={setTravelPackage}
@@ -185,7 +192,7 @@ function handleSubmit() {
             setShowDeletePopup={setShowDeletePopup}
 
         />
-        } */}
+        } 
 
         {showMessagePopup && (
         <div className="popup-class">
