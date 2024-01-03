@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState} from "react";
 import APIServices from "./ApiServices";
+;
 
 const CreatePackage = ({ travelPackage, setTravelPackage,syncTravelPackages, setShowCreatePopup }) => {
   
@@ -10,22 +11,24 @@ const CreatePackage = ({ travelPackage, setTravelPackage,syncTravelPackages, set
   const maxPrice=5000;
  
   const [attractions, setAttractions] = useState([]); // State to hold attractions
+  const [packageExistMsg, setPackageExistMsg]= useState(false); //State to ensure that packages of the same name are not created
+
+//******************** ISTRAVELPACKAGENAMEEXIST **********************/
+
+
+  const isTravelPackageNameExist = (name) => {
+
+    const existingPackage = travelPackage.find(packageObj => packageObj.name === name);
   
-  const emptyTravelPackage = {
-   name: "", 
-   destination: "", 
-   seasonal:"",
-   ticketsLeft:"0",
-   duration:"0",
-   numAttractions:"0",
-   attractions:[],
-   price:"0",
-   accomodation:"",
-   avgRating:"0",
-   arrayOfRating:[],
-   reviews:[],
-   image:""
-   };
+    if (existingPackage) {
+      console.log(`Match found for '${name}'`);
+      return true;
+    } else {
+      console.log(`No match found for '${name}'`);
+      return false;
+    }
+  };
+
 
 /************ handleCreateTravelPackageClick ******************/
 const handleCreateTravelPackageClick = async(event) => {
@@ -64,33 +67,22 @@ const handleCreateTravelPackageClick = async(event) => {
   image:image.name
   };
 
-  setTravelPackage(newTravelPackage);
-  console.log("TravelPackage Loaded ", newTravelPackage);
-  await APIServices.addTravelPackageAPI(newTravelPackage).then(() => {
-      syncTravelPackages(); 
-  })
 
-  console.log("TravelPackage Status ", travelPackage);
-  setShowCreatePopup(false);
+ if (isTravelPackageNameExist(name)){
+    console.log("Already Exists")
+    setPackageExistMsg(true);
+ } else{
+    setPackageExistMsg(false);
+    setTravelPackage([...travelPackage,newTravelPackage]);
+    console.log("TravelPackage Loaded ", newTravelPackage);
+    await APIServices.addTravelPackageAPI(newTravelPackage).then(() => {
+        syncTravelPackages(); 
+    })
+ 
+    console.log("TravelPackage Status ", travelPackage);
+    setShowCreatePopup(false);
+ }
 };
-
-/************  Function to handle the image file selection ****************/
-  const handleImageChange = (e) => {
-      console.log("Image e",e);
-      const imageFile = e.target.files[0]; // Get the selected file
-  
-      if (imageFile) {
-        // const imageUrl = URL.createObjectURL(file);
-        setTravelPackage({
-          ...travelPackage,
-          image: imageFile.name, // Update the image URL in the state
-        });
-      
-      console.log("Image TP ", travelPackage)
-      console.log("Image file ",imageFile);
-      // console.log("Image file ",imageUrl);
-    }
-  };
 
 
 /*********************  createAttractionInputs *************************/
@@ -140,6 +132,9 @@ const handleCreateTravelPackageClick = async(event) => {
         required pattern="[A-Za-z ]+"
         title="Please enter alphabets"
         />
+        {packageExistMsg && (
+        <span style={{ color: 'red' }}>Package Name Already Exists!</span>
+        )}
         <label htmlFor="destination"> Destination: </label>
         <input
         id="destination"
@@ -161,10 +156,10 @@ const handleCreateTravelPackageClick = async(event) => {
         </select>
         </div>
        <br></br>
-        <label htmlFor="ticketsLeft"> Tickets Left: </label>
+        <label htmlFor="availableTickets"> Available Tickets: </label>
         <input
-        id="ticketsLeft"
-        name="ticketsLeft"
+        id="availableTickets"
+        name="availableTickets"
         type="number"
         required pattern="[0-9]+"
         min="1"
@@ -218,7 +213,6 @@ const handleCreateTravelPackageClick = async(event) => {
         type="file"
         name="image"
         required
-        onChange={handleImageChange}
         />
          <button type="submit">Submit</button> 
     </form> 
