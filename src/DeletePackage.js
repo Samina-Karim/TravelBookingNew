@@ -9,16 +9,16 @@ const DeletePackage = ({ travelPackage, setTravelPackage,syncTravelPackages, set
 const [selectedPackage,setSelectedPackage] = useState([]); 
 
 /******************** LISTOFPACKAGENAMES  ******************************/
-const listOfPackageNames = () => {
+// const listOfPackageNames = () => {
     
-    const packageNames =[];
+//     const packageNames =[];
   
-    for (let i=0; i< travelPackage.length; i++){
-       packageNames[i] = travelPackage[i].name;
+//     for (let i=0; i< travelPackage.length; i++){
+//        packageNames[i] = travelPackage[i].name;
   
-    }
-    console.log("PackageNames ",packageNames);
-  };
+//     }
+//     console.log("PackageNames ",packageNames);
+//   };
 
     /*********************  listDeleteTravelPackage *************************/
     const listDeleteTravelPackage = (travelPackage) => {
@@ -38,13 +38,20 @@ const listOfPackageNames = () => {
         return packageOptions;
       };
 
+     /*********************  handleDeleteClick *************************/
+      const handleDeleteClick= async(event) => {
+        event.preventDefault(); // Prevents the default form submission behavior
+            
+            console.log("Selected Package",selectedPackage);
+            const deletePackage = travelPackage.find(packageObj => packageObj.name === selectedPackage);
+            // Calling delete API or function to delete the package
+            await APIServices.deleteTravelPackageAPI(deletePackage.id).then(() => {
+                // Update travelPackage state after deletion
+                syncTravelPackages(); 
+            })
+        // Reset the selection after deletion
+            setSelectedPackage('');
     
-      const handleDeleteClick = () => {
-        // Implement deletion logic based on selectedPackage
-        // Use selectedPackage value to delete the chosen travel package
-        // Call relevant API or function to delete the package
-        // Ensure to update travelPackage state after deletion
-        // You may use setSelectedPackage('') to reset the selection after deletion
       };
     
       return (
@@ -54,8 +61,7 @@ const listOfPackageNames = () => {
             
           </label>
           <br></br>
-          <select id="packageToDelete" onChange={(e) => setSelectedPackage(e.target.value)}>
-            {/* Invoke the function to render the list of package options */}
+           <select id="packageToDelete" name="packageToDelete" onChange={(e) => setSelectedPackage(e.target.value)}>
             {listDeleteTravelPackage(travelPackage)}
           </select>
           <br></br>
