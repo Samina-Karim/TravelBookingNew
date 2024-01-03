@@ -145,7 +145,7 @@ body{
   /******** Delete PopUpMenu Styling ***************/
   
   .deletePopUpMenu {
-    width: 150px; /* Set width as needed */
+    width: 250px; /* Set width as needed */
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
