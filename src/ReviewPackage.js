@@ -31,7 +31,7 @@ const ReviewPackage = ({ travelPackage, setTravelPackage,syncTravelPackages, set
    };
  
    return (
-     <div className="reviewPopUpMenu">
+     <div className="PopUpMenu">
         <h3>Review Package</h3>
        <label htmlFor="packageToReview" style={{ display: 'inline-block' }}>
          
