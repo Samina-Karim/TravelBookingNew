@@ -101,9 +101,10 @@ body{
     background-color: rgb(28, 28, 131);
   }
   
-  /******** Create PopUpMenu Styling ***************/
+  /******** Create, Delete & Review PopUpMenu Styling ***************/
   
-  .createPopUpMenu {
+ 
+  .PopUpMenu {
     width: 300px; 
     padding: 20px;
     border: 1px solid #ccc;
@@ -111,16 +112,16 @@ body{
     background-color: #f9f9f9;
   }
   
-  .createPopUpMenu h3 {
+  .PopUpMenu h3 {
     margin-bottom: 10px;
   }
   
-  .createPopUpMenu label {
+  .PopUpMenu label{
     display: block;
     margin-bottom: 5px;
   }
   
-  .createPopUpMenu input {
+  .PopUpMenu input{
     width: calc(100% - 12px);
     padding: 8px;
     margin-bottom: 10px;
@@ -128,7 +129,7 @@ body{
     border-radius: 3px;
   }
   
-  .createPopUpMenu button {
+  .PopUpMenu button {
     padding: 10px 15px;
     background-color: #007bff;
     color: #fff;
@@ -137,93 +138,11 @@ body{
     cursor: pointer;
   }
   
-  .createPopUpMenu button:hover {
+  .PopUpMenu button:hover {
     background-color: #0056b3;
   }
    
   
-  /******** Delete PopUpMenu Styling ***************/
-  
-  .deletePopUpMenu {
-    width: 250px; 
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-  }
-  
-  .deletePopUpMenu h3 {
-    margin-bottom: 10px;
-  }
-  
-  .deletePopUpMenu label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  .deletePopUpMenu input {
-    width: calc(100% - 12px);
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-  }
-  
-  .deletePopUpMenu button {
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 7px;
-    cursor: pointer;
-  }
-  
-  .deletePopUpMenu button:hover {
-    background-color: #0056b3;
-  }
-   
-/******** Review PopUpMenu Styling ***************/
-  
-.reviewPopUpMenu {
-  width: 250px; 
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-}
-
-.reviewPopUpMenu h3 {
-  margin-bottom: 10px;
-}
-
-.reviewPopUpMenu label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.reviewPopUpMenu input {
-  width: calc(100% - 12px);
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-}
-
-.reviewPopUpMenu button {
-  padding: 10px 15px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 7px;
-  cursor: pointer;
-}
-
-.reviewPopUpMenu button:hover {
-  background-color: #0056b3;
-}
- 
-
-
 
 
   /********** PopUp Message Styling ****/

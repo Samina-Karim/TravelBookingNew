@@ -121,7 +121,7 @@ const handleCreateTravelPackageClick = async(event) => {
   return (
   
    // Conditional rendering based on showCreatePopup state
-  <div className="createPopUpMenu">
+  <div className="PopUpMenu">
     <h3>Create Package</h3>
     <form onSubmit={handleCreateTravelPackageClick}>
         <label htmlFor="name"> Name: </label>

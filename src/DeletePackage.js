@@ -30,7 +30,7 @@ const [selectedPackage,setSelectedPackage] = useState("");
       };
     
       return (
-        <div className="deletePopUpMenu">
+        <div className="PopUpMenu">
            <h3>Delete Package</h3>
           <label htmlFor="packageToDelete" style={{ display: 'inline-block' }}>
             
