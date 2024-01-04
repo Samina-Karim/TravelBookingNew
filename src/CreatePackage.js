@@ -156,10 +156,10 @@ const handleCreateTravelPackageClick = async(event) => {
         </select>
         </div>
        <br></br>
-        <label htmlFor="availableTickets"> Available Tickets: </label>
+        <label htmlFor="ticketsLeft"> Available Tickets: </label>
         <input
-        id="availableTickets"
-        name="availableTickets"
+        id="ticketsLeft"
+        name="ticketsLeft"
         type="number"
         required pattern="[0-9]+"
         min="1"

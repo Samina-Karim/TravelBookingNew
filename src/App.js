@@ -3,6 +3,7 @@ import "./App.css";
 import BrowseForm from "./BrowseForm";
 import CreatePackage from "./CreatePackage";
 import DeletePackage from "./DeletePackage";
+import ReviewPackage from "./ReviewPackage";
 import APIServices from "./ApiServices";
 import { useState, useEffect } from "react";
 import React from "react";
@@ -21,6 +22,7 @@ function App() {
   const [showBrowsePopup, setShowBrowsePopup] = useState(false);
   const [showCreatePopup, setShowCreatePopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [showReviewPopup, setShowReviewPopup] = useState(false);
   const [showHomePopup, setShowHomePopup] = useState(false);
   const [showAboutPopup, setShowAboutPopup] = useState(false);
   const [showContactPopup, setShowContactPopup] = useState(false);
@@ -63,12 +65,14 @@ const togglePopup = () => {
   };
   
 
+
 //*********************** Control Popup Menu Displays(SAMINA)*****************************/
 
 const openPopup = (popupName) => {
     setShowBrowsePopup(false);
     setShowCreatePopup(false);
     setShowDeletePopup(false);
+    setShowReviewPopup(false);
     setShowHomePopup(false);
     setShowAboutPopup(false);
     setShowContactPopup(false);
@@ -109,10 +113,29 @@ const openPopup = (popupName) => {
         case "message":
           setShowMessagePopup(true);
           break;
+        case "review":
+            setShowReviewPopup(true);
+            break;
         default:
           break;
     }
 };
+
+  /*********************  listTravelPackage *************************/
+  const listTravelPackage = (travelPackage) => {
+    const packageOptions = [];
+    packageOptions.push(<option>Select Package...</option>);
+      
+    for (let i = 0; i < travelPackage.length; i++) {
+        packageOptions.push(
+        <option key={travelPackage[i].name} value={travelPackage[i].name}>
+                {travelPackage[i].name}
+        </option>);
+    }
+    console.log("Package Names", packageOptions);
+    return packageOptions;
+  };
+
 //****************** HANA **********************************************************/
 
 function handleFromChange(e) {
@@ -160,6 +183,7 @@ function handleSubmit() {
                 <a onClick={() => openPopup("browse")}>Browse Package </a>
                 <a onClick={() => openPopup("create")}>Create Package</a>
                 <a onClick={() => openPopup("delete")}>Delete Package</a>
+                <a onClick={() => openPopup("review")}>Review Package</a>
               </div>
             </div>
             <button onClick={() => openPopup("contact")}>CONTACT</button>
@@ -182,6 +206,7 @@ function handleSubmit() {
             setTravelPackage={setTravelPackage}
             syncTravelPackages={syncTravelPackages}
             setShowCreatePopup={setShowCreatePopup}
+           
             
         />
         }
@@ -192,7 +217,17 @@ function handleSubmit() {
             setTravelPackage={setTravelPackage}
             syncTravelPackages={syncTravelPackages}
             setShowDeletePopup={setShowDeletePopup}
-
+            listTravelPackage={listTravelPackage}
+        />
+        } 
+{/************** HAIDER ********************/}
+      {showReviewPopup &&
+        <ReviewPackage
+            travelPackage={travelPackage}
+            setTravelPackage={setTravelPackage}
+            syncTravelPackages={syncTravelPackages}
+            setShowReviewPopup={setShowReviewPopup}
+            listTravelPackage={listTravelPackage}
         />
         } 
 

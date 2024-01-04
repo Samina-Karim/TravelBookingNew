@@ -3,46 +3,11 @@ import { useState} from "react";
 import APIServices from "./ApiServices";
 ;
 
-const DeletePackage = ({ travelPackage, setTravelPackage,syncTravelPackages, setShowDeletePopup }) => {
+const DeletePackage = ({ travelPackage, setTravelPackage,syncTravelPackages, setShowDeletePopup, listTravelPackage }) => {
  
 
 const [selectedPackage,setSelectedPackage] = useState(""); 
 
-/******************** LISTOFPACKAGENAMES  ******************************/
-// const listOfPackageNames = () => {
-    
-//     const packageNames =[];
-  
-//     for (let i=0; i< travelPackage.length; i++){
-//        packageNames[i] = travelPackage[i].name;
-  
-//     }
-//     console.log("PackageNames ",packageNames);
-//   };
-
-    /*********************  listDeleteTravelPackage *************************/
-    const listDeleteTravelPackage = (travelPackage) => {
-        const packageOptions = [];
-        packageOptions.push(<option>Select Package...</option>);
-          
-        // if (travelPackage.length >0) {
-                for (let i = 0; i < travelPackage.length; i++) {
-                packageOptions.push(
-                    <option key={travelPackage[i].name} value={travelPackage[i].name}>
-                    {travelPackage[i].name}
-                    </option>
-                );
-                
-            }
-        // } else{
-        //      setShowDeletePopup(false);
-
-        // }
-
-        console.log("Package Names", packageOptions);
-      
-        return packageOptions;
-      };
 
      /*********************  handleDeleteClick *************************/
       const handleDeleteClick= async(event) => {
@@ -75,7 +40,7 @@ const [selectedPackage,setSelectedPackage] = useState("");
             console.log("E Target.Value",e.target.value);
            
             setSelectedPackage(e.target.value)}}>
-            {listDeleteTravelPackage(travelPackage)}
+            {listTravelPackage(travelPackage)}
           </select>
           <br></br>
           <br></br>
