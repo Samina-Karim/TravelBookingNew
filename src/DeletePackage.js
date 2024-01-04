@@ -6,7 +6,7 @@ import APIServices from "./ApiServices";
 const DeletePackage = ({ travelPackage, setTravelPackage,syncTravelPackages, setShowDeletePopup }) => {
  
 
-const [selectedPackage,setSelectedPackage] = useState([]); 
+const [selectedPackage,setSelectedPackage] = useState(""); 
 
 /******************** LISTOFPACKAGENAMES  ******************************/
 // const listOfPackageNames = () => {
@@ -23,15 +23,21 @@ const [selectedPackage,setSelectedPackage] = useState([]);
     /*********************  listDeleteTravelPackage *************************/
     const listDeleteTravelPackage = (travelPackage) => {
         const packageOptions = [];
-      
-        for (let i = 0; i < travelPackage.length; i++) {
-          packageOptions.push(
-            <option key={travelPackage[i].name} value={travelPackage[i].name}>
-              {travelPackage[i].name}
-            </option>
-          );
+        packageOptions.push(<option>Select Package...</option>);
           
-        }
+        // if (travelPackage.length >0) {
+                for (let i = 0; i < travelPackage.length; i++) {
+                packageOptions.push(
+                    <option key={travelPackage[i].name} value={travelPackage[i].name}>
+                    {travelPackage[i].name}
+                    </option>
+                );
+                
+            }
+        // } else{
+        //      setShowDeletePopup(false);
+
+        // }
 
         console.log("Package Names", packageOptions);
       
@@ -43,14 +49,18 @@ const [selectedPackage,setSelectedPackage] = useState([]);
         event.preventDefault(); // Prevents the default form submission behavior
             
             console.log("Selected Package",selectedPackage);
-            const deletePackage = travelPackage.find(packageObj => packageObj.name === selectedPackage);
-            // Calling delete API or function to delete the package
-            await APIServices.deleteTravelPackageAPI(deletePackage.id).then(() => {
-                // Update travelPackage state after deletion
-                syncTravelPackages(); 
-            })
+            if (selectedPackage !== ""){
+                const deletePackage = travelPackage.find(packageObj => packageObj.name === selectedPackage);
+                console.log("Delete Package ID",deletePackage.id);
+                // Calling delete API or function to delete the package
+                await APIServices.deleteTravelPackageAPI(deletePackage.id).then(() => {
+                    // Update travelPackage state after deletion
+                    syncTravelPackages(); 
+                })
+            }
         // Reset the selection after deletion
-            setSelectedPackage('');
+            setSelectedPackage("");
+            setShowDeletePopup(false);
     
       };
     
@@ -61,7 +71,10 @@ const [selectedPackage,setSelectedPackage] = useState([]);
             
           </label>
           <br></br>
-           <select id="packageToDelete" name="packageToDelete" onChange={(e) => setSelectedPackage(e.target.value)}>
+           <select id="packageToDelete" name="packageToDelete" onChange={(e) => {
+            console.log("E Target.Value",e.target.value);
+           
+            setSelectedPackage(e.target.value)}}>
             {listDeleteTravelPackage(travelPackage)}
           </select>
           <br></br>

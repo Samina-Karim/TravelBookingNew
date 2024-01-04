@@ -87,9 +87,11 @@ const openPopup = (popupName) => {
           break;
 
         case "delete":
+          console.log("# of Travel Packages", travelPackage.length)
           if (travelPackage.length > 0){
               setShowDeletePopup(true);  
           } else{
+            setShowDeletePopup(false);
               displayMessage("No Packages in the database to delete !")
           }
           break;
