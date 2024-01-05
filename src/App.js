@@ -26,9 +26,11 @@ function App() {
   const [showHomePopup, setShowHomePopup] = useState(false);
   const [showAboutPopup, setShowAboutPopup] = useState(false);
   const [showContactPopup, setShowContactPopup] = useState(false);
+  const [showDisplayPackage, setShowDisplayPackage] = useState(false);
   const [showMessagePopup, setShowMessagePopup] = useState(false);
   const [travelPackage, setTravelPackage] = useState([]);
   const [userMessage, setUserMessage] = useState("");
+  const [userConfirmation, setUserConfirmation] = useState(false);
  
   const maxPackages=5;
 
@@ -77,6 +79,7 @@ const openPopup = (popupName) => {
     setShowAboutPopup(false);
     setShowContactPopup(false);
     setShowMessagePopup(false);
+    setShowDisplayPackage(false);
     switch (popupName) {
         case "browse":
           setShowBrowsePopup(true);
@@ -116,12 +119,15 @@ const openPopup = (popupName) => {
         case "review":
             setShowReviewPopup(true);
             break;
+        case "display":
+              setShowDisplayPackage(true);
+              break;
         default:
           break;
     }
 };
 
-  /*********************  listTravelPackage *************************/
+  /*********************  listAllTravelPackages *************************/
   const listTravelPackage = (travelPackage) => {
     const packageOptions = [];
     packageOptions.push(<option>Select Package...</option>);
@@ -135,8 +141,71 @@ const openPopup = (popupName) => {
     console.log("Package Names", packageOptions);
     return packageOptions;
   };
+/********************* displayPackage  *****************************/
+const handleDisplayPackage = (selectedPackage) =>{
+  openPopup("display");
+  console.log("Display Selected Package", selectedPackage);
+  // return(
+    <>
+  <div>
+      <div class="container">
+      <div class="box">
+        <h1>Name</h1>
+        <p>{selectedPackage.name}</p>
+        <img src={selectedPackage.image} alt="Image"/>
+        <div class="content">
+          <div class="section">
+            <h2>Destination:</h2>
+            <p>{selectedPackage.destination}</p>
+          </div>
+          <div class="section">
+            <h2>Season:</h2>
+            <p>{selectedPackage.seasonal}</p>
+          </div>
+          <div class="section">
+            <h2>Tickets Available:</h2>
+            <p>{selectedPackage.ticketsLeft}</p>
+          </div>
+          <div class="section">
+            <h2>Duration:</h2>
+            <p>Trip Duration</p>
+          </div>
+          <div class="section">
+            <h2>Number of Attractions:</h2>
+            <p>{selectedPackage.numAttractions}</p>
+          </div>
+          <div class="section">
+            <h2>Attractions:</h2>
+            <p>{selectedPackage.attractions}</p>
+          </div>
+          <div class="section">
+            <h2>Price:</h2>
+            <p>{selectedPackage.price}</p>
+          </div>
+          <div class="section">
+            <h2>Accommodation:</h2>
+            <p>{selectedPackage.accomodation}</p>
+          </div>
+          <div class="section">
+            <h2>Average Rating:</h2>
+            <p>{selectedPackage.avRating}</p>
+          </div>
+          <div class="section">
+            <h2>Reviews:</h2>
+            <p>{selectedPackage.reviews}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  <button onClick={() => setUserConfirmation(true)}>CONFIRM</button>
+  <button onClick={() => setUserConfirmation(false)}>CANCEL</button>
+  </div>  
+  )
+</>
+// )
+}
 
-//****************** HANA **********************************************************/
+//****************** HANA *******************************************/
 
 function handleFromChange(e) {
     e.preventDefault();
@@ -205,9 +274,8 @@ function handleSubmit() {
             travelPackage={travelPackage}
             setTravelPackage={setTravelPackage}
             syncTravelPackages={syncTravelPackages}
-            setShowCreatePopup={setShowCreatePopup}
-           
-            
+            setShowCreatePopup={setShowCreatePopup} 
+            handleDisplayPackage={handleDisplayPackage}
         />
         }
         
@@ -218,6 +286,7 @@ function handleSubmit() {
             syncTravelPackages={syncTravelPackages}
             setShowDeletePopup={setShowDeletePopup}
             listTravelPackage={listTravelPackage}
+            handleDisplayPackage={handleDisplayPackage}
         />
         } 
 {/************** HAIDER ********************/}
@@ -234,12 +303,13 @@ function handleSubmit() {
         {showMessagePopup && (
         <div className="popup-class">
             <div className="popup-content">
-            <span className="close-btn" onClick={togglePopup}>&times;</span>
-            <p>{userMessage}</p>
+                <span className="close-btn" onClick={togglePopup}>&times;</span>
+                <p>{userMessage}</p>
             </div>
         </div>
         )}
 
+      
        
 
 

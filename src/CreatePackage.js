@@ -3,7 +3,7 @@ import { useState} from "react";
 import APIServices from "./ApiServices";
 ;
 
-const CreatePackage = ({ travelPackage, setTravelPackage,syncTravelPackages, setShowCreatePopup }) => {
+const CreatePackage = ({ travelPackage, setTravelPackage,syncTravelPackages, setShowCreatePopup, handleDisplayPackage }) => {
   
   const maxDuration=7;
   const maxAttractions=5;
@@ -72,6 +72,7 @@ const handleCreateTravelPackageClick = async(event) => {
     console.log("Already Exists")
     setPackageExistMsg(true);
  } else{
+    handleDisplayPackage(newTravelPackage);
     setPackageExistMsg(false);
     setTravelPackage([...travelPackage,newTravelPackage]);
     console.log("TravelPackage Loaded ", newTravelPackage);

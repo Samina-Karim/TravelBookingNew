@@ -3,7 +3,7 @@ import { useState} from "react";
 import APIServices from "./ApiServices";
 ;
 
-const DeletePackage = ({ travelPackage, setTravelPackage,syncTravelPackages, setShowDeletePopup, listTravelPackage }) => {
+const DeletePackage = ({ travelPackage, setTravelPackage,syncTravelPackages, setShowDeletePopup, listTravelPackage, handleDisplayPackage}) => {
  
 
 const [selectedPackage,setSelectedPackage] = useState(""); 
@@ -16,6 +16,9 @@ const [selectedPackage,setSelectedPackage] = useState("");
             console.log("Selected Package",selectedPackage);
             if (selectedPackage !== ""){
                 const deletePackage = travelPackage.find(packageObj => packageObj.name === selectedPackage);
+                handleDisplayPackage(deletePackage);
+
+
                 console.log("Delete Package ID",deletePackage.id);
                 // Calling delete API or function to delete the package
                 await APIServices.deleteTravelPackageAPI(deletePackage.id).then(() => {
@@ -26,6 +29,7 @@ const [selectedPackage,setSelectedPackage] = useState("");
         // Reset the selection after deletion
             setSelectedPackage("");
             setShowDeletePopup(false);
+
     
       };
     
