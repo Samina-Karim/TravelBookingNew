@@ -55,4 +55,4 @@ const addTravelPackageAPI = (travelPackage) => {
 }
 
 
-export default { getTravelPackageAPI, deleteTravelPackageAPI, addTravelPackageAPI };
+export default { getTravelPackageAPI, deleteTravelPackageAPI, addTravelPackageAPI, getATravelPackageAPI };
