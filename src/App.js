@@ -4,6 +4,7 @@ import BrowseForm from "./BrowseForm";
 import CreatePackage from "./CreatePackage";
 import DeletePackage from "./DeletePackage";
 import ReviewPackage from "./ReviewPackage";
+import BookPackage from "./BookPackage";
 import APIServices from "./ApiServices";
 import { useState, useEffect } from "react";
 import React from "react";
@@ -23,6 +24,7 @@ function App() {
   const [showCreatePopup, setShowCreatePopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [showReviewPopup, setShowReviewPopup] = useState(false);
+  const [showBookPopup, setShowBookPopup] = useState(false);
   const [showHomePopup, setShowHomePopup] = useState(false);
   const [showAboutPopup, setShowAboutPopup] = useState(false);
   const [showContactPopup, setShowContactPopup] = useState(false);
@@ -75,6 +77,7 @@ const openPopup = (popupName) => {
     setShowCreatePopup(false);
     setShowDeletePopup(false);
     setShowReviewPopup(false);
+    setShowBookPopup(false);
     setShowHomePopup(false);
     setShowAboutPopup(false);
     setShowContactPopup(false);
@@ -119,6 +122,9 @@ const openPopup = (popupName) => {
         case "review":
             setShowReviewPopup(true);
             break;
+        case "book":
+              setShowBookPopup(true);
+              break;
         case "display":
               setShowDisplayPackage(true);
               break;
@@ -145,7 +151,7 @@ const openPopup = (popupName) => {
 const handleDisplayPackage = (selectedPackage) =>{
   openPopup("display");
   console.log("Display Selected Package", selectedPackage);
-  // return(
+ return(
     <>
   <div>
       <div class="container">
@@ -200,9 +206,9 @@ const handleDisplayPackage = (selectedPackage) =>{
   <button onClick={() => setUserConfirmation(true)}>CONFIRM</button>
   <button onClick={() => setUserConfirmation(false)}>CANCEL</button>
   </div>  
-  )
+
 </>
-// )
+ )
 }
 
 //****************** HANA *******************************************/
@@ -253,6 +259,7 @@ function handleSubmit() {
                 <a onClick={() => openPopup("create")}>Create Package</a>
                 <a onClick={() => openPopup("delete")}>Delete Package</a>
                 <a onClick={() => openPopup("review")}>Review Package</a>
+                <a onClick={() => openPopup("book")}>Book Package</a>
               </div>
             </div>
             <button onClick={() => openPopup("contact")}>CONTACT</button>
@@ -299,6 +306,19 @@ function handleSubmit() {
             listTravelPackage={listTravelPackage}
         />
         } 
+
+        {/************** AWAAB ********************/}
+      {showBookPopup &&
+        <BookPackage
+            travelPackage={travelPackage}
+            setTravelPackage={setTravelPackage}
+            syncTravelPackages={syncTravelPackages}
+            setShowReviewPopup={setShowBookPopup}
+            listTravelPackage={listTravelPackage}
+        />
+        } 
+
+        {/* {showDisplayPackage && handleDisplayPackage()} */}
 
         {showMessagePopup && (
         <div className="popup-class">

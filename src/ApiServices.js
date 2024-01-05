@@ -17,6 +17,19 @@ const getTravelPackageAPI = () => {
     });
 }
 
+// Gets a travel package with id from the API
+const getATravelPackageAPI = (id) => {
+    const request = axios.get(`${baseUrl}/TravelPackages/${id}`);   
+    console.log("RetrieveATravelPackage", request)
+    return request.then(response => {
+        console.log("RetrieveATravelPackage", response.data);
+        return response.data;
+    }).catch(error => {
+        console.error("Error retrieving a travel package:", error);
+        throw error;
+    });
+}
+
 // Deletes a travel package from the API based on id passed
 const deleteTravelPackageAPI = (id) => {
     const request = axios.delete(`${baseUrl}/TravelPackages/${id}`);
